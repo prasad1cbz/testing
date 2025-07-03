@@ -61,26 +61,31 @@ In Jenkins UI → Manage Jenkins → Plugins → Available plugins, install:
 - SSH Agent plugin
 
 ### 3️⃣ Generate SSH key for Jenkins
-
+#### Switch to Jenkins User
 ```bash
+sudo su - jenkins
+```
+#### Generate a new SSH key for the jenkins user:
+```
 ssh-keygen -t rsa -b 4096 -C "jenkins@ubuntu-1"
 ```
-
-### 4️⃣ Copy public key to ubuntu-2
-
-```bash
-ssh-copy-id ubuntu@10.0.0.47
+### 4️⃣  Copy Public Key to Remote Server(webserver)
 ```
-
+sudo ssh-copy-id -i /var/lib/jenkins/.ssh/id_rsa.pub ubuntu@10.0.0.47
+```
 Or manually copy `~/.ssh/id_rsa.pub` to `~/.ssh/authorized_keys` on ubuntu-2.
 
-### 5️⃣ Test SSH connectivity
 
-```bash
-ssh prasad@10.0.0.47
+### 5️⃣ Test SSH connectivityn from Jenkins
 ```
-
+sudo -u jenkins ssh ubuntu@10.0.0.47
+```
 Should connect without password prompt.
+
+#### Or explicitly specify the key if needed:
+```
+sudo -u jenkins ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@10.0.0.47
+```
 
 ### 🔐 6️⃣ Create SSH credentials in Jenkins
 
